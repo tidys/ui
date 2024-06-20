@@ -1,6 +1,7 @@
 import { readFileSync } from "fs-extra";
 import { join } from "path";
-import { createApp, App } from "vue";
+import { createApp, App, ref } from "vue";
+import { ListItem, MyList } from "./list";
 const panelDataMap = new WeakMap<any, App>();
 /**
  * @zh 如果希望兼容 3.3 之前的版本可以使用下方的代码
@@ -16,14 +17,8 @@ module.exports = Editor.Panel.define({
       console.log("hide");
     },
   },
-  template: readFileSync(
-    join(__dirname, "../../../static/template/default/index.html"),
-    "utf-8"
-  ),
-  style: readFileSync(
-    join(__dirname, "../../../static/style/default/index.css"),
-    "utf-8"
-  ),
+  template: readFileSync(join(__dirname, "../../../static/template/default/index.html"), "utf-8"),
+  style: readFileSync(join(__dirname, "../../../static/style/default/index.css"), "utf-8"),
   $: {
     app: "#app",
     text: "#text",
@@ -38,31 +33,38 @@ module.exports = Editor.Panel.define({
   },
   ready() {
     if (this.$.text) {
-      this.$.text.innerHTML = "Hello Cocos.";
+      //   this.$.text.innerHTML = "Hello Cocos.";
     }
+    const listArray = ref<ListItem[]>([]);
     if (this.$.app) {
-      const app = createApp({});
-      app.config.compilerOptions.isCustomElement = (tag) =>
-        tag.startsWith("ui-");
-      app.component("MyCounter", {
-        template: readFileSync(
-          join(__dirname, "../../../static/template/vue/counter.html"),
-          "utf-8"
-        ),
+      const app = createApp({
         data() {
           return {
-            counter: 0,
+            listArray,
           };
         },
+        created() {
+          for (let i = 0; i < 10; i++) {
+            listArray.value.push({ text: `${i}` });
+          }
+        },
         methods: {
-          addition() {
-            this.counter += 1;
+          onSelect(data: ListItem) {
+            console.log(data.text);
           },
-          subtraction() {
-            this.counter -= 1;
+          onAdd() {
+            listArray.value.push({ text: listArray.value.length.toString() });
+          },
+          onPop() {
+            if (listArray.value.length) {
+              listArray.value.pop();
+            }
           },
         },
       });
+      app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith("ui-");
+      MyList(app);
+
       app.mount(this.$.app);
       panelDataMap.set(this, app);
     }

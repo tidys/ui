@@ -1,8 +1,22 @@
 #text {
     color: var(--color-normal-contrast-weakest);
     margin: auto;
-    width: 180px;
+    width: 80px;
 }
 .counter {
     text-align: center;
+}
+/* my-list */
+.my-list{
+    display: flex;
+    overflow-y: scroll;
+    flex-direction: column;
+    border: 1px solid #ccc;;
+}
+/** my-list-tem */
+.my-list-item{
+    display: flex;
+}
+.my-list-item:hover{
+    background-color: rebeccapurple;
 }

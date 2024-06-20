@@ -1,0 +1,11 @@
+<div class="my-list" :style="getStyle()">
+  <div
+    class="my-list-item"
+    v-for="(item,index) in data"
+    :key="index"
+    @click="onClick(item)"
+    :style="getItemStyle(item)"
+  >
+    {{item.text}}
+  </div>
+</div>
