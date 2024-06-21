@@ -18,6 +18,10 @@ export function MyList(app: App) {
           return [];
         },
       },
+      index: {
+        type: Number,
+        default: 0,
+      },
       height: {
         type: Number,
         default: 330,
@@ -28,13 +32,23 @@ export function MyList(app: App) {
         selectedItem: null,
       };
     },
-    emits: ["on-select"],
+    emits: ["on-select", "update:index"],
     created() {
       console.log("created");
+    },
+    mounted() {
+      this.selectedItem = this.$props.data[this.$props.index] || null;
+    },
+    watch: {
+      index(val) {
+        this.selectedItem = this.$props.data[val] || null;
+      },
     },
     methods: {
       onClick(item: Ref<ListItem>) {
         this.selectedItem = item;
+        const idx = this.$props.data.indexOf(item);
+        this.$emit("update:index", idx);
         this.$emit("on-select", toRaw(item));
       },
       getStyle() {

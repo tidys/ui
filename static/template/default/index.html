@@ -1,9 +1,11 @@
 <div>
   <div id="app">
-    <my-list :data="listArray" @on-select="onSelect"></my-list>
+    <my-list v-model:index="listIndex" :data="listArray" @on-select="onSelect"></my-list>
     <div>
       <button @click="onAdd">add</button>
       <button @click="onPop">pop</button>
+      <button @click="onNext">next index</button>
+
     </div>
   </div>
 

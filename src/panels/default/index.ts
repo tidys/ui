@@ -36,11 +36,13 @@ module.exports = Editor.Panel.define({
       //   this.$.text.innerHTML = "Hello Cocos.";
     }
     const listArray = ref<ListItem[]>([]);
+    const listIndex = ref<number>(0);
     if (this.$.app) {
       const app = createApp({
         data() {
           return {
             listArray,
+            listIndex,
           };
         },
         created() {
@@ -49,6 +51,9 @@ module.exports = Editor.Panel.define({
           }
         },
         methods: {
+          onNext() {
+            listIndex.value++;
+          },
           onSelect(data: ListItem) {
             console.log(data.text);
           },
